@@ -4,7 +4,7 @@
 
 **RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought**
 
-[[Paper](https://arxiv.org/abs/2606.15753)] [[Models](https://huggingface.co/QwQ2/RoboPIN-4B)] [[Datasets](https://huggingface.co/datasets/QwQ2/RoboPIN-Datasets)] [[Evaluation](https://github.com/pickxiguapi/EmbodiedEvalKit)] [[Data Pipeline](docs_data_pipeline.md)] [[Demo](#demo)]
+[[Paper](https://arxiv.org/abs/2606.15753)] [[Models](https://huggingface.co/QwQ2/RoboPIN-4B)] [[Datasets](https://huggingface.co/datasets/QwQ2/RoboPIN-Datasets)] [[Evaluation](https://github.com/pickxiguapi/EmbodiedEvalKit)] [[Data Pipeline](robopin_pipeline/docs_data_pipeline.md)] [[Demo](#demo)]
 
 </div>
 
@@ -128,7 +128,7 @@ python -m robopin_pipeline.runners.run_pipeline \
   --filtered-output work/filtered.json
 ```
 
-See [docs_data_pipeline.md](docs_data_pipeline.md) for input formats, stage definitions, prompts, and filtering rules.
+See [robopin_pipeline/docs_data_pipeline.md](robopin_pipeline/docs_data_pipeline.md) for input formats, stage definitions, prompts, and filtering rules.
 
 ---
 
