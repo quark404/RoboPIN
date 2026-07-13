@@ -4,21 +4,21 @@
 
 **RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought**
 
-[[Paper](https://arxiv.org/abs/2606.15753)] [[Models](https://huggingface.co/QwQ2/RoboPIN-4B)] [[Datasets](https://huggingface.co/datasets/QwQ2/RoboPIN-Datasets)] [[Evaluation](https://github.com/pickxiguapi/EmbodiedEvalKit)] [[Data Pipeline](robopin_pipeline/docs_data_pipeline.md)] [[Demo](#demo)]
+[[📄 Paper](https://arxiv.org/abs/2606.15753)] [[🤗 Models](https://huggingface.co/QwQ2/RoboPIN-4B)] [[🎯 Datasets](https://huggingface.co/datasets/QwQ2/RoboPIN-Datasets)] [[📊 Evaluation](https://github.com/pickxiguapi/EmbodiedEvalKit)] [[🧩 Data Pipeline](robopin_pipeline/docs_data_pipeline.md)] [[💬 Demo](#demo)]
 
 </div>
 
 ---
 
-## Updates
+## 🔥 Updates
 
-- **[2026-07-13]** Model weights released on Hugging Face: [QwQ2/RoboPIN-4B](https://huggingface.co/QwQ2/RoboPIN-4B).
-- **[2026-07-13]** Dataset repository initialized: [QwQ2/RoboPIN-Datasets](https://huggingface.co/datasets/QwQ2/RoboPIN-Datasets). Dataset files will be uploaded separately.
-- **[2026-07-13]** Public data construction pipeline released, including semantic parsing, Florence-2 + SAM 2 grounding, PinCoT generation prompts, and filtering utilities.
+- **[2026-07-13]** 🎉 Model weights released on Hugging Face: [QwQ2/RoboPIN-4B](https://huggingface.co/QwQ2/RoboPIN-4B).
+- **[2026-07-13]** 🎯 Dataset repository initialized: [QwQ2/RoboPIN-Datasets](https://huggingface.co/datasets/QwQ2/RoboPIN-Datasets). Dataset files will be uploaded separately.
+- **[2026-07-13]** 🧩 Public data construction pipeline released, including semantic parsing, Florence-2 + SAM 2 grounding, PinCoT generation prompts, and filtering utilities.
 
 ---
 
-## Overview
+## 📖 Overview
 
 **RoboPIN** is a 4B vision-language model for grounded embodied reasoning. It introduces **Pinned Chain-of-Thought (PinCoT)**, a structured reasoning paradigm that pins each reasoning step to visual evidence through identity-bound reasoning anchors.
 
@@ -39,7 +39,7 @@ RoboPIN is trained with a three-stage post-training recipe:
 
 ---
 
-## Setup
+## 🛠️ Setup
 
 1. **Clone the repository**
 
@@ -69,7 +69,7 @@ export HF_ENDPOINT=https://hf-mirror.com
 
 ---
 
-## Inference
+## 🚀 Inference
 
 Run single-image inference:
 
@@ -90,13 +90,13 @@ python examples/infer.py \
   --prompt "Answer the task using both views and keep object identities consistent."
 ```
 
-### Demo
+### 💬 Demo
 
 Demo assets and additional examples will be added later. The current release provides the inference entrypoint and model weights.
 
 ---
 
-## Data Construction Pipeline
+## 🧩 Data Construction Pipeline
 
 We provide a lightweight public implementation of the PinCoT data construction pipeline:
 
@@ -132,7 +132,7 @@ See [robopin_pipeline/docs_data_pipeline.md](robopin_pipeline/docs_data_pipeline
 
 ---
 
-## Evaluation
+## 📊 Evaluation
 
 We evaluate RoboPIN-4B using [EmbodiedEvalKit](https://github.com/pickxiguapi/EmbodiedEvalKit), a unified embodied AI evaluation framework.
 
@@ -166,7 +166,7 @@ bash scripts/evaluate_with_embodiedevalkit.sh
 
 ---
 
-## Datasets
+## 🎯 Datasets
 
 The dataset repository has been initialized at:
 
@@ -176,7 +176,7 @@ Dataset files and detailed data cards will be uploaded separately.
 
 ---
 
-## Citation
+## 📜 Citation
 
 If you use RoboPIN in your research, please cite our paper:
 
@@ -189,6 +189,6 @@ If you use RoboPIN in your research, please cite our paper:
 }
 ```
 
-## License
+## ⚖️ License
 
 This repository is released under the MIT License. Model weights and datasets may have additional terms; please check the corresponding Hugging Face pages before use.
