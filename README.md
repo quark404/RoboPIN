@@ -9,6 +9,7 @@ Paper: **RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought**
 - Model weights: [QwQ2/RoboPIN-4B](https://huggingface.co/QwQ2/RoboPIN-4B)
 - Evaluation toolkit: [EmbodiedEvalKit](https://github.com/pickxiguapi/EmbodiedEvalKit)
 - Evaluation project page: [embodied-r.github.io](https://embodied-r.github.io/)
+- Data construction pipeline: [docs_data_pipeline.md](docs_data_pipeline.md)
 
 ## Highlights
 
@@ -81,6 +82,20 @@ python eval_erqa.py \
 ```
 
 For convenience, this repository includes `scripts/evaluate_with_embodiedevalkit.sh`, which wraps the same pattern.
+
+## Data Construction Pipeline
+
+This repository includes a lightweight public pipeline for constructing PinCoT-style data:
+
+```bash
+python -m robopin_pipeline.runners.run_pipeline \
+  --config configs/pipeline.example.json \
+  semantic-parse \
+  --input work/canonical.json \
+  --output work/semantic.json
+```
+
+See [docs_data_pipeline.md](docs_data_pipeline.md) for the full `canonicalize -> semantic-parse -> grounding -> xml -> thinking -> filter` workflow.
 
 ## Citation
 

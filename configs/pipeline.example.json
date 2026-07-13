@@ -1,0 +1,35 @@
+{
+  "pipeline": {
+    "name": "robopin_pincot_generation",
+    "primary_detector": "florence2",
+    "segmentor": "sam2"
+  },
+  "qwen_api": {
+    "api_key": "EMPTY",
+    "base_url": "http://127.0.0.1:8000/v1",
+    "model_name": "/path/to/Qwen3-VL-32B-Instruct",
+    "timeout": 600,
+    "max_tokens_task_parse": 512,
+    "max_tokens_thinking": 2048,
+    "temperature_task_parse": 0.1,
+    "temperature_thinking": 0.2
+  },
+  "florence2": {
+    "model_path": "/path/to/microsoft/Florence-2-large",
+    "device": "cuda:0",
+    "max_region_proposals": 8,
+    "max_new_tokens": 256
+  },
+  "sam2": {
+    "repo_path": "/path/to/sam2",
+    "config_path": "configs/sam2.1/sam2.1_hiera_l.yaml",
+    "checkpoint_path": "/path/to/sam2.1_hiera_large.pt",
+    "device": "cuda:0"
+  },
+  "pointing": {
+    "image_root": "",
+    "default_box_padding": 0.04,
+    "prefer_mask_centroid": true,
+    "dedup_iou_threshold": 0.7
+  }
+}

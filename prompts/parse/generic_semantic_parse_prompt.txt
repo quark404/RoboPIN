@@ -1,0 +1,34 @@
+You are preparing one sample for a grounded embodied reasoning data pipeline.
+Your job is semantic parsing only. Do not answer the question.
+
+Return valid JSON only. Do not use markdown.
+
+Required keys:
+- "task_family": short task category, such as spatial_relation, pointing, affordance, navigation, planning, multi_view, or unknown
+- "target_text": comma-separated grounding phrases for the entities or regions that should become reasoning anchors
+- "target_text_items": array of the same grounding phrases in order
+- "grounding_queries": array of short open-vocabulary detector queries
+- "target_kind": object, region, affordance_contact, free_space, marker, or mixed
+- "target_view": integer image index where the target evidence should usually be grounded
+- "requires_same_entity": boolean; true when the same entity should be tracked across views
+- "reasoning_scope": single_view, cross_view, temporal, or multi_step
+
+Rules:
+- Extract task-relevant visual evidence, not every visible object.
+- For spatial-relation questions, include both the target and reference object, target first.
+- For pointing or manipulation questions, include the object, part, contact region, destination, or reference objects needed to decide the final point.
+- For multi-view or camera-motion questions without a single explicit target, include 2-8 stable, re-identifiable objects per scene, such as door, table, couch, cabinet, window, sink, bed, chair, painting, countertop.
+- Avoid generic background phrases such as wall, room, scene, image, background, floor texture, shadow, reflection, and tiny clutter unless the question explicitly asks for them.
+- Keep grounding phrases short, lowercase, and friendly to open-vocabulary detection.
+- If multiple images are present, set requires_same_entity=true when object identity must be compared across views.
+- If the question asks about the second/current/final image, set target_view to the last image index. Otherwise use 0 unless the question says otherwise.
+- Do not include the final answer in any field.
+
+Sample metadata:
+- dataset: {dataset}
+- task_family_hint: {task_family}
+- num_images: {num_images}
+- answer_type: {answer_type}
+
+Question:
+{question}

@@ -1,0 +1,38 @@
+You are given a problem description, the final answer, and candidate visual anchors formatted as XML-like tags.
+Your task is to generate a grounded PinCoT reasoning trace that explains how the final answer is derived from the visual anchors.
+
+Use this output format exactly:
+<think>reasoning here</think><answer>final answer here</answer>
+
+Reasoning rules:
+- Start by stating the goal from a first-person perspective, such as "I need to ...".
+- Use only task-relevant anchors. Do not list every candidate blindly.
+- Candidate anchors are provided as tags like:
+  <tag_name name="NAME" img_idx="INDEX" point="[X, Y]">
+- When first mentioning an object, convert the candidate tag to:
+  <obj name="NAME" id="obj_01" img_idx="INDEX" point="[X, Y]">
+- Use <space ...> instead of <obj ...> for free-space, destination, placement, or abstract spatial regions.
+- After first mention, refer to that entity only by its ID text, such as obj_01 or space_01.
+- Assign IDs in first-mention order, using obj_01, obj_02, space_01, etc.
+- If the same object appears across multiple views, reuse the exact same ID and introduce the full tag again with the new img_idx and point.
+- The point values are normalized absolute coordinates on a 0-1000 scale.
+- Compare coordinates explicitly when useful for left/right/above/below/near/far/cross-view motion.
+- For multiple-choice questions, reason about the relevant options and put the selected option or answer text in <answer>.
+- For pointing tasks, put the final structured point answer in <answer>.
+
+Quality constraints:
+- Do not mention that a final answer, gold answer, expected answer, or provided answer was supplied.
+- Do not write phrases like "based on the answer", "according to the answer", or "this matches the provided answer".
+- Do not use hesitation or correction phrases such as "wait", "actually", or "I was wrong".
+- Do not invent anchors that are absent from the candidate list.
+- Do not create empty point tags.
+- Do not reuse an ID for different entities.
+
+Problem:
+{question}
+
+Final answer to explain:
+{answer}
+
+Candidate anchors:
+{objects}
