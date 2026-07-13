@@ -1,33 +1,64 @@
-# RoboPIN (ACM MM26)
+# RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought (ACM MM26)
 
-RoboPIN is a 4B embodied reasoning model trained with Pinned Chain-of-Thought (PinCoT), a structured reasoning paradigm that pins each reasoning step to visual evidence through reasoning anchors. These anchors bind task-relevant entities to names, identities, view indices, and spatial grounding so that reasoning remains traceable across steps and views.
+<div align="center">
 
-Paper: **RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought**
+**RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought**
 
-## Resources
+[[Paper](https://arxiv.org/abs/2606.15753)] [[Models](https://huggingface.co/QwQ2/RoboPIN-4B)] [[Datasets](https://huggingface.co/datasets/QwQ2/RoboPIN-Datasets)] [[Evaluation](https://github.com/pickxiguapi/EmbodiedEvalKit)] [[Data Pipeline](docs_data_pipeline.md)] [[Demo](#demo)]
 
-- Model weights: [QwQ2/RoboPIN-4B](https://huggingface.co/QwQ2/RoboPIN-4B)
-- Evaluation toolkit: [EmbodiedEvalKit](https://github.com/pickxiguapi/EmbodiedEvalKit)
-- Evaluation project page: [embodied-r.github.io](https://embodied-r.github.io/)
-- Data construction pipeline: [docs_data_pipeline.md](docs_data_pipeline.md)
+</div>
 
-## Highlights
+---
 
-- PinCoT links reasoning steps to explicit visual anchors instead of relying on implicit text-only references.
-- RoboPIN is trained with three-stage post-training for embodied knowledge, structured reasoning, and process-supervised alignment.
-- The 4B model is designed for embodied spatial reasoning, multi-view reasoning, and pointing tasks.
+## Updates
 
-## Installation
+- **[2026-07-13]** Model weights released on Hugging Face: [QwQ2/RoboPIN-4B](https://huggingface.co/QwQ2/RoboPIN-4B).
+- **[2026-07-13]** Dataset repository initialized: [QwQ2/RoboPIN-Datasets](https://huggingface.co/datasets/QwQ2/RoboPIN-Datasets). Dataset files will be uploaded separately.
+- **[2026-07-13]** Public data construction pipeline released, including semantic parsing, Florence-2 + SAM 2 grounding, PinCoT generation prompts, and filtering utilities.
 
-```bash
-cd RoboPIN
-pip install -r requirements.txt
+---
+
+## Overview
+
+**RoboPIN** is a 4B vision-language model for grounded embodied reasoning. It introduces **Pinned Chain-of-Thought (PinCoT)**, a structured reasoning paradigm that pins each reasoning step to visual evidence through identity-bound reasoning anchors.
+
+Unlike text-only or coordinate-only chain-of-thought, PinCoT represents task-relevant objects and spaces with explicit anchors:
+
+```text
+<obj name="cup" id="obj_01" img_idx="0" point="[312, 476]">
+<space name="middle plate" id="space_01" img_idx="1" point="[545, 623]">
 ```
 
-The model weights can be loaded directly from Hugging Face:
+These anchors bind semantic name, identity, view index, and spatial grounding, enabling the model to maintain consistent references across multi-step and multi-view reasoning.
+
+RoboPIN is trained with a three-stage post-training recipe:
+
+- **SFT** for embodied domain adaptation.
+- **CoT-SFT** for PinCoT structured reasoning.
+- **RFT** for process-supervised alignment over format, identity consistency, anchor localization, and final-answer correctness.
+
+---
+
+## Setup
+
+1. **Clone the repository**
 
 ```bash
-export MODEL_PATH=QwQ2/RoboPIN-4B
+git clone https://github.com/quark404/RoboPIN.git
+cd RoboPIN
+```
+
+2. **Create and activate an environment**
+
+```bash
+conda create -n robopin python=3.11 -y
+conda activate robopin
+```
+
+3. **Install dependencies**
+
+```bash
+pip install -r requirements.txt
 ```
 
 If Hugging Face access is unstable in your environment, set:
@@ -36,7 +67,9 @@ If Hugging Face access is unstable in your environment, set:
 export HF_ENDPOINT=https://hf-mirror.com
 ```
 
-## Quick Inference
+---
+
+## Inference
 
 Run single-image inference:
 
@@ -57,11 +90,53 @@ python examples/infer.py \
   --prompt "Answer the task using both views and keep object identities consistent."
 ```
 
+### Demo
+
+Demo assets and additional examples will be added later. The current release provides the inference entrypoint and model weights.
+
+---
+
+## Data Construction Pipeline
+
+We provide a lightweight public implementation of the PinCoT data construction pipeline:
+
+```text
+semantic parsing -> grounding -> XML anchor export -> PinCoT generation -> filtering
+```
+
+Run semantic parsing:
+
+```bash
+python -m robopin_pipeline.runners.run_pipeline \
+  --config configs/pipeline.example.json \
+  semantic-parse \
+  --input work/canonical.json \
+  --output work/semantic.json
+```
+
+Run the complete staged workflow:
+
+```bash
+python -m robopin_pipeline.runners.run_pipeline \
+  --config configs/pipeline.example.json \
+  full \
+  --input work/canonical.json \
+  --semantic-output work/semantic.json \
+  --grounding-output work/grounding.json \
+  --xml-output work/xml.json \
+  --thinking-output work/thinking.json \
+  --filtered-output work/filtered.json
+```
+
+See [docs_data_pipeline.md](docs_data_pipeline.md) for input formats, stage definitions, prompts, and filtering rules.
+
+---
+
 ## Evaluation
 
-We evaluate RoboPIN-4B using [EmbodiedEvalKit](https://github.com/pickxiguapi/EmbodiedEvalKit), a unified evaluation framework for embodied AI benchmarks.
+We evaluate RoboPIN-4B using [EmbodiedEvalKit](https://github.com/pickxiguapi/EmbodiedEvalKit), a unified embodied AI evaluation framework.
 
-Clone and install the evaluation toolkit:
+Clone and install the toolkit:
 
 ```bash
 git clone https://github.com/pickxiguapi/EmbodiedEvalKit.git
@@ -69,7 +144,7 @@ cd EmbodiedEvalKit
 pip install -r requirements.txt
 ```
 
-Then run a Qwen3-VL style benchmark command with RoboPIN weights:
+Run a Qwen3-VL style benchmark command with RoboPIN weights:
 
 ```bash
 python eval_erqa.py \
@@ -81,29 +156,36 @@ python eval_erqa.py \
   --tensor_parallel_size 2
 ```
 
-For convenience, this repository includes `scripts/evaluate_with_embodiedevalkit.sh`, which wraps the same pattern.
-
-## Data Construction Pipeline
-
-This repository includes a lightweight public pipeline for constructing PinCoT-style data:
+This repository also includes a wrapper:
 
 ```bash
-python -m robopin_pipeline.runners.run_pipeline \
-  --config configs/pipeline.example.json \
-  semantic-parse \
-  --input work/canonical.json \
-  --output work/semantic.json
+MODEL_PATH=QwQ2/RoboPIN-4B \
+BENCHMARK_SCRIPT=eval_erqa.py \
+bash scripts/evaluate_with_embodiedevalkit.sh
 ```
 
-See [docs_data_pipeline.md](docs_data_pipeline.md) for the full `canonicalize -> semantic-parse -> grounding -> xml -> thinking -> filter` workflow.
+---
+
+## Datasets
+
+The dataset repository has been initialized at:
+
+[QwQ2/RoboPIN-Datasets](https://huggingface.co/datasets/QwQ2/RoboPIN-Datasets)
+
+Dataset files and detailed data cards will be uploaded separately.
+
+---
 
 ## Citation
 
+If you use RoboPIN in your research, please cite our paper:
+
 ```bibtex
-@misc{robopin2026,
-  title  = {RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought},
-  author = {Anonymous},
-  year   = {2026}
+@article{huang2026robopin,
+  title={RoboPIN: Grounded Embodied Reasoning via Pinned Chain-of-Thought},
+  author={Huang, Yaoting and Yuan, Yifu and Han, Linqi and Li, Chengwen and Zhang, Shuoheng and Yao, Xianze and Tang, Hongyao and Zheng, Yan and Hao, Jianye},
+  journal={arXiv preprint arXiv:2606.15753},
+  year={2026}
 }
 ```
 
