@@ -1,4 +1,4 @@
-# RoboPIN
+# RoboPIN (ACM MM26)
 
 RoboPIN is a 4B embodied reasoning model trained with Pinned Chain-of-Thought (PinCoT), a structured reasoning paradigm that pins each reasoning step to visual evidence through reasoning anchors. These anchors bind task-relevant entities to names, identities, view indices, and spatial grounding so that reasoning remains traceable across steps and views.
 
